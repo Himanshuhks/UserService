@@ -23,25 +23,41 @@ public class UserController {
 
     @PostMapping("user")
     public ResponseEntity<User> addUser(@RequestBody User newUser) {
-        User user = userRepository.save(newUser);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        try {
+            User user = userRepository.save(newUser);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @GetMapping("user/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") String userId) {
-        Optional<User> user = userRepository.findById(Long.valueOf(userId));
-        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        try {
+            Optional<User> user = userRepository.findById(Long.valueOf(userId));
+            return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @PutMapping("user")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User updatedUser = userRepository.save(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        try {
+            User updatedUser = userRepository.save(user);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @DeleteMapping("user/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") String userId) {
-        userRepository.deleteById(Long.valueOf(userId));
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            userRepository.deleteById(Long.valueOf(userId));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }
